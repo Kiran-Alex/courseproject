@@ -18,17 +18,27 @@ import {
   import {ArrowBackIcon} from '@chakra-ui/icons'
   
   const UserPurchasedCourses = () => {
-    const [courses, setCourses] = useState<string | undefined>();
+    const [courses, setCourses] = useState<course>();
     const toast = useToast();
     const navigate = useNavigate();
     const navamset = useSetRecoilState(navam);
     navamset("Dash");
+
+    type course = {
+      map(arg0: (course: { price: string | number; imageLink: string; title: string; description: string; published: boolean; _id: string; }) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
+      price: number | string;
+      imageLink: string;
+      title: string;
+      description: string;
+      published?: boolean;
+      _id?: string;
+}
   
     const getData = async () => {
       try {
-        const response = await axios.get(`${process.env.BACKEND_URL}/user/purchasedCourses`, {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/purchasedCourses`, {
           headers: {
-            authorization: localStorage.getItem(process.env.LOCAL_KEY),
+            authorization: localStorage.getItem(import.meta.env.VITE_LOCAL_KEY),
           },
         });
        

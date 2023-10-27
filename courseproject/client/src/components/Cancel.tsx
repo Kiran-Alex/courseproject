@@ -1,10 +1,9 @@
-import React from 'react'
 import { Spinner } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
 const Cancel = () => {
     const navigate =  useNavigate()
-    localStorage.setItem(process.env.COURSE_KEY,"")
+    localStorage.setItem(import.meta.env.VITE_COURSE_KEY,"")
     setTimeout(()=>{navigate("/dashboard")},3000)
     
   return (

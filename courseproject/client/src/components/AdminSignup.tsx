@@ -196,7 +196,7 @@ export default function JoinOurTeam() {
               onClick={async () => {
                 try {
                   const response = await axios.post(
-                    `${process.env.BACKEND_URL}/admin/signup`,
+                    `${import.meta.env.VITE_BACKEND_URL}/admin/signup`,
                     {
                       username: username,
                       password: password,

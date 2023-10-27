@@ -83,7 +83,7 @@ import {
                   onClick={async () => {
                     try {
                       const response = await axios.post(
-                        `${process.env.BACKEND_URL}/user/login`,
+                        `${import.meta.env.VITE_BACKEND_URL}/user/login`,
                         {},
                         {
                           headers : {
@@ -97,7 +97,7 @@ import {
                       const status = response.status;
     
                       if (status >= 200 && status <= 209) {
-                        localStorage.setItem(process.env.LOCAL_KEY,"Bearer "+ response.data.token)
+                        localStorage.setItem(import.meta.env.VITE_LOCAL_KEY,"Bearer "+ response.data.token)
 
                         toast({
                           title: "Successfull",

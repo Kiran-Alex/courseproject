@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import {useEffect} from "react";
 import "../styles/Landing.css";
 import { navam } from '../../store/atoms/navbaratom';
 import { useSetRecoilState } from "recoil";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
   const navamset = useSetRecoilState(navam)
-  useEffect(()=>{ navamset("Landing")},[])
+  useEffect(()=>{ navamset("Landing")},[navamset])
   const navigate = useNavigate()
 
  

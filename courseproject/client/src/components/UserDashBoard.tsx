@@ -9,7 +9,6 @@ import {
   Text,
   Button,
   useToast,
-  useDisclosure,
   ButtonGroup,
 } from "@chakra-ui/react";
 import "../styles/AdminDashBoard.css";
@@ -20,7 +19,7 @@ import { useSetRecoilState } from "recoil";
 import { navam,userpurchase  } from "../../store/atoms/navbaratom";
 
 const UserDashBoard = () => {
-  const [courses, setCourses] = useState<string | undefined>();
+  const [courses, setCourses] = useState<course>();
   const toast = useToast();
   const navigate = useNavigate();
   const navamset = useSetRecoilState(navam);
@@ -28,11 +27,21 @@ const UserDashBoard = () => {
   navamset("Dash");
   navbtn("user")
 
+  type course = {
+                  map(arg0: (course: { price: string | number; imageLink: string; title: string; description: string; published: boolean; _id: string; }) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
+                  price: number | string;
+                  imageLink: string;
+                  title: string;
+                  description: string;
+                  published: boolean;
+                  _id: string;
+  }
+
   const getData = async () => {
     try {
-      const response = await axios.get(`${process.env.BACKEND_URL}/admin/courses`, {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/courses`, {
         headers: {
-          authorization: localStorage.getItem(process.env.LOCAL_KEY),
+          authorization: localStorage.getItem(import.meta.env.VITE_LOCAL_KEY),
         },
       });
       const filteredCourses = response.data.courses.filter(
@@ -104,7 +113,7 @@ const UserDashBoard = () => {
                             onClick={async () => {
                               try {
                                 const res = await axios.post(
-                                  `${process.env.BACKEND_URL}/create-checkout-session`,
+                                  `${import.meta.env.VITE_BACKEND_URL}/create-checkout-session`,
                                   {
                                     coursedata: {
                                       title: course.title,
@@ -114,7 +123,7 @@ const UserDashBoard = () => {
                                 );
                                 console.log(res.status);
                                 if (res.status == 200) {
-                                  localStorage.setItem(process.env.COURSE_KEY,course._id)
+                                  localStorage.setItem(import.meta.env.VITE_COURSE_KEY,course._id)
                                   toast({
                                     title:
                                       "You will be using below card details since it's in Test mode ",

@@ -1,4 +1,4 @@
-import React ,{useState}from "react";
+import {useState}from "react";
 import { FormControl, FormLabel, Input,Select,Heading, Button, ButtonGroup,useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -66,7 +66,7 @@ const CreateCourse = () => {
             else {
                 publishedstatus = true
             }
-            const response  = await axios.post(`${process.env.BACKEND_URL}/admin/createCourse`,{
+            const response  = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/createCourse`,{
                 title: title,
                 description: description,
                 price: price,
@@ -74,7 +74,7 @@ const CreateCourse = () => {
                 published: publishedstatus,
             },{
                 headers : {
-                    Authorization : localStorage.getItem(process.env.LOCAL_KEY)
+                    Authorization : localStorage.getItem(import.meta.env.VITE_LOCAL_KEY)
                 }
             })
 

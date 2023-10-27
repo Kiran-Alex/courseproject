@@ -32,7 +32,7 @@ import { navam ,userpurchase } from "../../store/atoms/navbaratom";
 
 
 const AdminDashBoard = () => {
-  const [courses, setCourses] = useState<string | undefined>();
+  const [courses, setCourses] = useState<course>();
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [price, setPrice] = useState<string>();
@@ -46,15 +46,25 @@ const AdminDashBoard = () => {
   navamset("Dash");
   navbtn("admin")
 
+  type course = {
+    map(arg0: (course: { price: string | number; imageLink: string; title: string; description: string; published: boolean; _id: number; }) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
+    price: number | string;
+    imageLink: string;
+    title: string;
+    description: string;
+    published: boolean;
+    _id: string;
+}
+
   const getData = async () => {
     try {
-      const response = await axios.get(`${process.env.BACKEND_URL}/admin/courses`, {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/courses`, {
         headers: {
-          authorization: localStorage.getItem(process.env.LOCAL_KEY),
+          authorization: localStorage.getItem(import.meta.env.VITE_LOCAL_KEY),
         },
       });
       setCourses(response.data.courses);
-    } catch (err: any) {
+    } catch (err:any) {
       if (err.response.status >= 400 && err.response.status <= 409) {
         toast({
           title: "Please Signin",
@@ -161,12 +171,12 @@ const AdminDashBoard = () => {
                                     }}
                                   >
                                     <option
-                                      value={course.published ? true : false}
+                                      value={course.published ? 'true' : 'false'}
                                     >
                                       {course.published ? "true" : "false"}
                                     </option>
                                     <option
-                                      value={course.published ? false : true}
+                                      value={course.published ? 'false' : 'true'}
                                     >
                                       {course.published ? "false" : "true"}
                                     </option>
@@ -183,7 +193,7 @@ const AdminDashBoard = () => {
                                       publishedstatus = Published;
                                     }
                                     const response = await axios.put(
-                                      `${process.env.BACKEND_URL}/admin/updateCourse/${course._id}`,
+                                      `${import.meta.env.VITE_BACKEND_URL}/admin/updateCourse/${course._id}`,
                                       {
                                         title: title,
                                         description: description,
@@ -194,7 +204,7 @@ const AdminDashBoard = () => {
                                       {
                                         headers: {
                                           authorization:
-                                            localStorage.getItem(process.env.LOCAL_KEY),
+                                            localStorage.getItem(import.meta.env.VITE_LOCAL_KEY),
                                         },
                                       }
                                     );

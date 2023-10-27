@@ -1,7 +1,7 @@
 declare namespace NodeJS {
   interface ProcessEnv {
-    BACKEND_URL :string
-    LOCAL_KEY : string
-    COURSE_KEY : string
+    VITE_BACKEND_URL :string
+    VITE_LOCAL_KEY : string
+    VITE_COURSE_KEY : string
   }
 }

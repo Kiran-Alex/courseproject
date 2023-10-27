@@ -83,7 +83,7 @@ import { navam } from "../../store/atoms/navbaratom";
                   onClick={async () => {
                     try {
                       const response = await axios.post(
-                        `${process.env.BACKEND_URL}/admin/signin`,
+                        `${import.meta.env.VITE_BACKEND_URL}/admin/signin`,
                         {},
                         {
                           headers : {
@@ -97,7 +97,7 @@ import { navam } from "../../store/atoms/navbaratom";
                       const status = response.status;
     
                       if (status >= 200 && status <= 209) {
-                        localStorage.setItem(process.env.LOCAL_KEY ,"Bearer "+ response.data.token)
+                        localStorage.setItem(import.meta.env.VITE_LOCAL_KEY ,"Bearer "+ response.data.token)
 
                         toast({
                           title: "Successfull",
@@ -114,7 +114,7 @@ import { navam } from "../../store/atoms/navbaratom";
                       } 
                        
                       
-                    } catch (err:unknown) {
+                    } catch (err:any) {
                       if(err.response.status>= 400 &&err.response.status<= 409 )
                       {
                         toast({
