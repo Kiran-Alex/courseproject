@@ -3,6 +3,8 @@ import "../styles/Landing.css";
 import { navam } from '../../store/atoms/navbaratom';
 import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
+import mainpng from "../assets/main.png"
+
 
 const Landing = () => {
   const navamset = useSetRecoilState(navam)
@@ -59,7 +61,7 @@ const Landing = () => {
             </div>
           </div>
           <div className="Landm2">
-            <img  style={{height : "100%"}} src="../public/main.png" />
+            <img  style={{height : "100%"}} src= {mainpng} />
           </div>
         </div>
       </div>
