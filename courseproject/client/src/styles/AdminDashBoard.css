@@ -1,0 +1,18 @@
+.mcont {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.mc {
+    width: 98%;
+    min-height: 98%;
+    max-height: fit-content;
+}
+
+#pq1:hover {
+    cursor: pointer;
+}
