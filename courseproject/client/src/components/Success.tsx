@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import axios from "axios";
 import { Button ,Spinner} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 const Success = () => {
   const [sustate, setSustate] = useState(false);
   const [spin,setSpin] = useState(false)
-  const data = localStorage.getItem("courseid");
-  const token = localStorage.getItem("token");
+  const data = localStorage.getItem(process.env.COURSE_KEY);
+  const token = localStorage.getItem(process.env.LOCAL_KEY);
   const navigate = useNavigate()
   return (
     <><div style={{height : 300 ,display : "flex",alignItems : "center",justifyContent : "center"}}>
@@ -18,7 +18,7 @@ const Success = () => {
         onClick={async () => {
           try {
             const response = await axios.post(
-              `http://localhost:3000/user/purchaseCourse/${data}`,
+              `${process.env.BACKEND_URL}/user/purchaseCourse/${data}`,
               null,
               {
                 headers: {

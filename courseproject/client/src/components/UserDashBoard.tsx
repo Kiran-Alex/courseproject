@@ -30,9 +30,9 @@ const UserDashBoard = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/admin/courses", {
+      const response = await axios.get(`${process.env.BACKEND_URL}/admin/courses`, {
         headers: {
-          authorization: localStorage.getItem("token"),
+          authorization: localStorage.getItem(process.env.LOCAL_KEY),
         },
       });
       const filteredCourses = response.data.courses.filter(
@@ -104,7 +104,7 @@ const UserDashBoard = () => {
                             onClick={async () => {
                               try {
                                 const res = await axios.post(
-                                  "http://localhost:3000/create-checkout-session",
+                                  `${process.env.BACKEND_URL}/create-checkout-session`,
                                   {
                                     coursedata: {
                                       title: course.title,
@@ -114,7 +114,7 @@ const UserDashBoard = () => {
                                 );
                                 console.log(res.status);
                                 if (res.status == 200) {
-                                  localStorage.setItem("courseid",course._id)
+                                  localStorage.setItem(process.env.COURSE_KEY,course._id)
                                   toast({
                                     title:
                                       "You will be using below card details since it's in Test mode ",

@@ -13,8 +13,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useSetRecoilState } from "recoil";
 import { navam } from "../../store/atoms/navbaratom";
-  
-  
 
   
   export default function JoinOurTeam() {
@@ -85,7 +83,7 @@ import { navam } from "../../store/atoms/navbaratom";
                   onClick={async () => {
                     try {
                       const response = await axios.post(
-                        "http://localhost:3000/admin/signin",
+                        `${process.env.BACKEND_URL}/admin/signin`,
                         {},
                         {
                           headers : {
@@ -99,7 +97,7 @@ import { navam } from "../../store/atoms/navbaratom";
                       const status = response.status;
     
                       if (status >= 200 && status <= 209) {
-                        localStorage.setItem("token" ,"Bearer "+ response.data.token)
+                        localStorage.setItem(process.env.LOCAL_KEY ,"Bearer "+ response.data.token)
 
                         toast({
                           title: "Successfull",

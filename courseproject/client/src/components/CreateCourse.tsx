@@ -66,7 +66,7 @@ const CreateCourse = () => {
             else {
                 publishedstatus = true
             }
-            const response  = await axios.post("http://localhost:3000/admin/createCourse",{
+            const response  = await axios.post(`${process.env.BACKEND_URL}/admin/createCourse`,{
                 title: title,
                 description: description,
                 price: price,
@@ -74,7 +74,7 @@ const CreateCourse = () => {
                 published: publishedstatus,
             },{
                 headers : {
-                    Authorization : localStorage.getItem("token")
+                    Authorization : localStorage.getItem(process.env.LOCAL_KEY)
                 }
             })
 

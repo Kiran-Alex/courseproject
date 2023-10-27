@@ -183,7 +183,7 @@ export default function JoinOurTeam() {
               onClick={async () => {
                 try {
                   const response = await axios.post(
-                    "http://localhost:3000/user/signup",
+                    `${process.env.BACKEND_URL}/user/signup`,
                     {
                       username: username,
                       password: password,

@@ -1,6 +1,6 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
-
+import dotenv from "dotenv";
 import Landing from "./components/Landing";
 import {Route,Routes} from "react-router-dom"
 import UserSignup from "./components/UserSignup";
@@ -13,6 +13,7 @@ import UserDashBoard from "./components/UserDashBoard";
 import Success from "./components/Success";
 import Cancel from "./components/Cancel";
 import UserPurchasedCourses from "./components/UserPurchasedCourses";
+dotenv.config()
 
 function App() {
   return (

@@ -30,6 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { navam ,userpurchase } from "../../store/atoms/navbaratom";
 
+
 const AdminDashBoard = () => {
   const [courses, setCourses] = useState<string | undefined>();
   const [title, setTitle] = useState<string>();
@@ -47,9 +48,9 @@ const AdminDashBoard = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/admin/courses", {
+      const response = await axios.get(`${process.env.BACKEND_URL}/admin/courses`, {
         headers: {
-          authorization: localStorage.getItem("token"),
+          authorization: localStorage.getItem(process.env.LOCAL_KEY),
         },
       });
       setCourses(response.data.courses);
@@ -182,7 +183,7 @@ const AdminDashBoard = () => {
                                       publishedstatus = Published;
                                     }
                                     const response = await axios.put(
-                                      `http://localhost:3000/admin/updateCourse/${course._id}`,
+                                      `${process.env.BACKEND_URL}/admin/updateCourse/${course._id}`,
                                       {
                                         title: title,
                                         description: description,
@@ -193,7 +194,7 @@ const AdminDashBoard = () => {
                                       {
                                         headers: {
                                           authorization:
-                                            localStorage.getItem("token"),
+                                            localStorage.getItem(process.env.LOCAL_KEY),
                                         },
                                       }
                                     );

@@ -26,9 +26,9 @@ import {
   
     const getData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/user/purchasedCourses", {
+        const response = await axios.get(`${process.env.BACKEND_URL}/user/purchasedCourses`, {
           headers: {
-            authorization: localStorage.getItem("token"),
+            authorization: localStorage.getItem(process.env.LOCAL_KEY),
           },
         });
        

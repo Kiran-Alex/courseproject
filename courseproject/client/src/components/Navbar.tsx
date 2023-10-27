@@ -132,7 +132,7 @@ export default function WithSubnavigation() {
             fontWeight={600}
             color={"white"}
             bg={"#EE8EA0"}
-            onClick={() =>{ localStorage.setItem("token",undefined), navigate("/")}}
+            onClick={() =>{ localStorage.setItem(process.env.LOCAL_KEY,undefined), navigate("/")}}
             _hover={{
               bg: "pink.300",
               color: "white",

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Cancel = () => {
     const navigate =  useNavigate()
-    localStorage.setItem("courseid","")
+    localStorage.setItem(process.env.COURSE_KEY,"")
     setTimeout(()=>{navigate("/dashboard")},3000)
     
   return (

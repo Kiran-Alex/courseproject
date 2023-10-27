@@ -83,7 +83,7 @@ import {
                   onClick={async () => {
                     try {
                       const response = await axios.post(
-                        "http://localhost:3000/user/login",
+                        `${process.env.BACKEND_URL}/user/login`,
                         {},
                         {
                           headers : {
@@ -97,7 +97,7 @@ import {
                       const status = response.status;
     
                       if (status >= 200 && status <= 209) {
-                        localStorage.setItem("token" ,"Bearer "+ response.data.token)
+                        localStorage.setItem(process.env.LOCAL_KEY,"Bearer "+ response.data.token)
 
                         toast({
                           title: "Successfull",
