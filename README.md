@@ -26,4 +26,4 @@ AWS
 
 1. Signup and Sign in
 2. Create Courses
-3. Publish Courses
+3. Edit Courses
