@@ -145,6 +145,16 @@ export default function JoinOurTeam() {
           <Box as={'form'} mt={10}>
             <Stack spacing={4}>
             <Input
+                type="email"
+                placeholder="email"
+                bg={"gray.100"}
+                border={0}
+                color={"gray.500"}
+                _placeholder={{
+                  color: "gray.500",
+                }}
+              />    
+            <Input
                 placeholder="Username"
                 bg={"gray.100"}
                 border={0}

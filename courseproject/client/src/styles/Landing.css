@@ -56,3 +56,39 @@
     flex-direction: row;
     align-items: center;
 }
+
+
+@media screen and (max-width: 943px) {
+    .LandmCont {
+        height: 100%;
+        flex-direction: column-reverse;
+    }
+    .Landm1 {
+        height: 50%;
+        width: 100%;
+    }
+    .Landm1-cont {
+        justify-content: right;
+    }
+    .Landm1-cont h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
+    .Landm2 {
+        height: 50%;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .Landm1-cont div {
+        margin-top: 10px;
+        text-align: center;
+    }
+    .Landm1-cont div span {
+        text-align: center;
+    }
+    .css-15bt6gt {
+        display : none;
+    }
+
+
+}

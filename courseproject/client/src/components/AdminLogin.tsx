@@ -23,8 +23,8 @@ import { navam } from "../../store/atoms/navbaratom";
     const navamset = useSetRecoilState(navam);
     navamset("Landing")
     return (
-      <Center h="100vh" backgroundImage="url('../public/BGImage.png')" > {/* Center vertically */}
-        <Box  w='400px'   position={'relative'}>
+      <Center h="100vh" > {/* Center vertically */}
+        <Box  w='400px' border='1px' borderColor='black' borderWidth={3} borderRadius={10} position={'relative'}  shadow={"xl"}>
           <Stack
             bg={'gray.50'}
             rounded={'xl'}
@@ -38,7 +38,7 @@ import { navam } from "../../store/atoms/navbaratom";
                 lineHeight={1.1}
                 fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
               >
-                Sign In
+                Admin Sign In
                 <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
                   !
                 </Text>
@@ -73,10 +73,10 @@ import { navam } from "../../store/atoms/navbaratom";
                 <Button
                   fontFamily={'heading'}
                   w={'full'}
-                  bgGradient="linear(to-r, red.400,pink.400)"
+                  bg="black"
                   color={'white'}
                   _hover={{
-                    bgGradient: 'linear(to-r, red.400,pink.400)',
+                    bg: 'black.300',
                     boxShadow: 'xl',
                   }}
 

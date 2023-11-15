@@ -10,7 +10,9 @@ import {
   Button,
   useToast,
   ButtonGroup,
+  Spinner
 } from "@chakra-ui/react";
+import { Alertdg } from "./alertDialog";
 import "../styles/AdminDashBoard.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -20,6 +22,7 @@ import { navam,userpurchase  } from "../../store/atoms/navbaratom";
 
 const UserDashBoard = () => {
   const [courses, setCourses] = useState<course>();
+  const [purchasedc,setPurchasedc] = useState<any>();
   const toast = useToast();
   const navigate = useNavigate();
   const navamset = useSetRecoilState(navam);
@@ -48,6 +51,17 @@ const UserDashBoard = () => {
         (cr: { published: boolean }) => cr.published === true
       );
       setCourses(filteredCourses);
+        // user purchased
+      const response1 = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/purchasedCourses`, {
+        headers: {
+          authorization: localStorage.getItem(import.meta.env.VITE_LOCAL_KEY),
+        },
+      });
+
+      setPurchasedc(response1.data.purchasedCourses)
+
+
+
     } catch (err: any) {
       if (err.response.status >= 400 && err.response.status <= 409) {
         toast({
@@ -67,7 +81,7 @@ const UserDashBoard = () => {
 
   useEffect(() => {
     getData();
-  }, [courses]);
+  }, []);
 
   return (
     <>
@@ -81,7 +95,7 @@ const UserDashBoard = () => {
             spacing={20}
             templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
           >
-            {courses &&
+            {courses ?
               courses.map(
                 (course: {
                   price: number | string;
@@ -91,6 +105,20 @@ const UserDashBoard = () => {
                   published: boolean;
                   _id: string;
                 }) => {
+                  let buytoggle;
+                  try{
+                    let purchasedcourse = purchasedc.find((obj: { _id: string; }) =>obj._id == course._id)
+                    if(purchasedcourse) {
+                      buytoggle = true
+                    }
+                    else {
+                      buytoggle = false
+                    }
+                  }
+                  catch(err) {
+
+                  }
+                  
                   return (
                     <Card key={course._id}>
                       <CardHeader>
@@ -109,48 +137,13 @@ const UserDashBoard = () => {
                       </CardBody>
                       <CardFooter>
                         <ButtonGroup spacing="4">
-                          <Button
-                            onClick={async () => {
-                              try {
-                                const res = await axios.post(
-                                  `${import.meta.env.VITE_BACKEND_URL}/create-checkout-session`,
-                                  {
-                                    coursedata: {
-                                      title: course.title,
-                                      price: course.price,
-                                    },
-                                  }
-                                );
-                                console.log(res.status);
-                                if (res.status == 200) {
-                                  localStorage.setItem(import.meta.env.VITE_COURSE_KEY,course._id)
-                                  toast({
-                                    title:
-                                      "You will be using below card details since it's in Test mode ",
-                                    description:
-                                      "Card Number : 4000007840000001 , cvv and expiry date of your choice ",
-                                    status: "loading",
-                                    duration: 6000,
-                                    isClosable: true,
-                                  });
-                                  await setTimeout(
-                                    () => (window.location.href = res.data.url),
-                                    6000
-                                  );
-                                }
-                              } catch (err) {
-                                console.log(err);
-                              }
-                            }}
-                          >
-                            Buy
-                          </Button>
+                          {!buytoggle ?<Alertdg  title={course.title} price={course.price} id={course._id} /> : "Paid"}
                         </ButtonGroup>
                       </CardFooter>
                     </Card>
                   );
                 }
-              )}
+              ) : <Spinner/>}
           </SimpleGrid>
           <br></br>
         </div>
