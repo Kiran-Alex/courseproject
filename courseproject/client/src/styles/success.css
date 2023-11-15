@@ -1,0 +1,33 @@
+.sb {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center ;
+}
+
+.sbcont {
+
+    width: 88%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.sbimg {
+    margin-bottom: 10px;
+    
+}
+
+ span {
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 542px) {
+   .sbcont  h1 {
+        font-size: 2.2em;
+        line-height: 1.1;
+    }
+}

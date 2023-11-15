@@ -8,6 +8,7 @@ import {
     Image,
     Text,
     useToast,
+    Spinner
   } from "@chakra-ui/react";
   import "../styles/AdminDashBoard.css";
   import { useState, useEffect } from "react";
@@ -43,6 +44,9 @@ import {
         });
        
         setCourses(response.data.purchasedCourses);
+
+       
+        console.log(response.data.purchasedCourses[0]._id)
       } catch (err: any) {
         if (err.response.status >= 400 && err.response.status <= 409) {
           toast({
@@ -62,7 +66,7 @@ import {
   
     useEffect(() => {
       getData();
-    }, [courses]);
+    }, []);
   
     return (
       <>
@@ -84,7 +88,7 @@ import {
               spacing={20}
               templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
             >
-              {courses &&
+              {courses ?
                 courses.map(
                   (course: {
                     price: number | string;
@@ -116,7 +120,7 @@ import {
                       </Card>
                     );
                   }
-                )}
+                ):<Spinner/>}
             </SimpleGrid>
             <br></br>
           </div>

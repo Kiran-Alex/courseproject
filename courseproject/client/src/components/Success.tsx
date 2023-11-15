@@ -1,57 +1,49 @@
-import  {useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
-import { Button ,Spinner} from "@chakra-ui/react";
+import { Button, Spinner } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import successgif from "../assets/success.svg";
+import "../styles/success.css"
 
 const Success = () => {
-  const [sustate, setSustate] = useState(false);
-  const [spin,setSpin] = useState(false)
-  const data = localStorage.getItem(import.meta.env.VITE_COURSE_KEY);
-  const token = localStorage.getItem(import.meta.env.VITE_LOCAL_KEY);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [loadingText, setLoadingText] = useState('');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLoadingText(loadingText => {
+        if (loadingText.length === 3) return '';
+        return loadingText + '.'; 
+      });
+    }, 300);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  setTimeout(()=>{
+    navigate("/dashboard")
+  },6000)
   return (
-    <><div style={{height : 300 ,display : "flex",alignItems : "center",justifyContent : "center"}}>
-    <center >
-      <Button 
-      marginBottom={10}
-        colorScheme="blue"
-        onClick={async () => {
-          try {
-            const response = await axios.post(
-              `${import.meta.env.VITE_BACKEND_URL}/user/purchaseCourse/${data}`,
-              null,
-              {
-                headers: {
-                  Authorization: token,
-                },
-              }
-            );
+    <>
+      <style>
+        {`
+        .css-1llqc3d {
+          display : none
+        }
+        `}
+      </style>
+      
+      <div className="sb">
+          <div className="sbcont">
+            <div className="sbimg">
+              <img src={successgif}/>
+            </div>
+            
+             <h1>Payment Received</h1>
+             <span>Redirecting to DashBoard Please wait  {loadingText}</span>
+           
 
-              setSpin(true)
-
-            if (response.status === 200) {
-              setSustate(true);
-              setTimeout(()=>{navigate("/dashboard")},3000)
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        }}
-      >
-        check Status
-      </Button>
-      &nbsp;&nbsp;&nbsp;
-      <br/>
-      <div>
-        {sustate
-          ? "Payment Successful redirecting to DashBoard Please Wait "
-          :null}
-      </div>
-      <br/>
-      <div >
-      {spin ? <Spinner /> : null}
-      </div>
-      </center>
+          </div>
       </div>
     </>
   );

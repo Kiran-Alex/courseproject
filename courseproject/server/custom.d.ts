@@ -6,6 +6,7 @@ declare namespace NodeJS {
       STRIPE_KEY: string;
       SECRET: string;
         PORT :number;
+        STRIPE_WEBHOOK_SECRET : string
     }
   }
   

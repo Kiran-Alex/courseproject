@@ -1,9 +1,10 @@
-import dotenv from 'dotenv';
+import dotenv, { parse } from 'dotenv';
 import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import bodyParser from 'body-parser';
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -50,6 +51,13 @@ interface Courseinput {
   published: Boolean;
 }
 
+interface CustomRequest extends Request {
+  rawBody?: any;
+}
+
+let userdat: any;
+
+
 const authinecatejwt = async (
   req: Request,
   res: Response,
@@ -76,6 +84,7 @@ const authinecatejwt = async (
         return res.status(401);
       }
       req.headers["user"] = user.username;
+      userdat = user.username
       next();
     });
   } catch (err) {
@@ -83,6 +92,8 @@ const authinecatejwt = async (
     return res.status(500).json({message : "Server Error please Check Logs"})
   }
 };
+
+
 
 
 
@@ -256,44 +267,16 @@ app.post("/user/login", async (req: Request, res: Response) => {
     res.status(500).json({message : "Server Error please Check Logs"})
   }
 });
-app.post("/user/purchaseCourse/:courseId", authinecatejwt, async (req: Request, res: Response) => {
-  try {
-    const courseId = req.params.courseId;
-    if (courseId) {
-      const existcourse = await Course.findById(courseId);
-      if (existcourse) {
-        const usern = req.headers["user"];
-        if (usern) {
-          const existuser = await User.findOne({ username: usern });
-          if (existuser) {
-            if (existuser.purchasedCourses.includes(existcourse._id)) {
-              res.status(401).json({ message: "Course already purchased" });
-            } else {
-              existuser.purchasedCourses.push(existcourse._id);
-              await existuser.save();
-              res.status(200).json({ message: "Course Purchased Successfully" });
-            }
-          } else {
-            res.status(401).json({ message: "Please Login" });
-          }
-        }
-      } else {
-        res.status(401).json({ message: "Invalid Course ID" });
-      }
-    } else {
-      res.status(401).json({ message: "Course ID is invalid" });
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Server Error, please check logs" });
-  }
-});
+
 
 
 app.post("/create-checkout-session",async(req:Request,res:Response) => {
   try {
     const coursedata = req.body.coursedata;
     const session =  await stripe.checkout.sessions.create({
+      metadata : {
+        id : coursedata.id
+      },
      
       line_items: [
         {
@@ -320,6 +303,136 @@ app.post("/create-checkout-session",async(req:Request,res:Response) => {
     console.log(err)
   }
 })
+
+app.get('/checkout-session', async (req, res) => {
+  const { sessionId } = req.query;
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  res.send(session);
+});
+
+
+const  purchasecourse = async (cid:object) => {
+  const parsecid:any = {cid}
+  try {
+      const courseId = parsecid.cid.id;
+      console.log(courseId , typeof courseId)
+      if (courseId) {
+        const existcourse = await Course.findById(courseId);
+        if (existcourse) {
+          const usern =userdat;
+          if (usern) {
+            const existuser = await User.findOne({ username: usern });
+            if (existuser) {
+              if (existuser.purchasedCourses.includes(existcourse._id)) {
+               console.log({ message: "Course already purchased" });
+              } else {
+                existuser.purchasedCourses.push(existcourse._id);
+                await existuser.save();
+               console.log({ message: "Course Purchased Successfully" });
+              }
+            } else {
+             console.log({ message: "Please Login" });
+            }
+          }
+        } else {
+         console.log({ message: "Invalid Course ID" });
+        }
+      } else {
+       console.log({ message: "Course ID is invalid" });
+      }
+    } catch (err) {
+      console.log(err);
+     console.log({ message: "Server Error, please check logs" });
+    }
+ 
+ }
+
+app.post('/webhook', bodyParser.raw({type: 'application/json'}) ,async (req:CustomRequest, res:Response) => {
+  // const payload = req.body;
+  // let signature = req.headers['stripe-signature'];
+  let event = req.body
+  let parseevent:any =  {event}
+  // console.log(parseevent)
+  // console.log(parseevent.event.type)
+
+  if (parseevent.event.type === 'checkout.session.completed') {
+    console.log(parseevent.event)
+    console.log(`meta => : ${parseevent.event.data.object.metadata}`)
+    console.log(`🔔  Payment received!`);
+    await  purchasecourse(parseevent.event.data.object.metadata)
+
+    // Note: If you need access to the line items, for instance to
+    // automate fullfillment based on the the ID of the Price, you'll
+    // need to refetch the Checkout Session here, and expand the line items:
+    //
+    // const session = await stripe.checkout.sessions.retrieve(
+    //   'cs_test_KdjLtDPfAjT1gq374DMZ3rHmZ9OoSlGRhyz8yTypH76KpN4JXkQpD2G0',
+    //   {
+    //     expand: ['line_items'],
+    //   }
+    // );
+    //
+    // const lineItems = session.line_items;
+  }
+  else {
+    
+  }
+
+  // Check if webhook signing is configured.
+  // if (process.env.STRIPE_WEBHOOK_SECRET) {
+  //   // Retrieve the event by verifying the signature using the raw body and secret.
+
+
+  //   console.log(`rawBody : ${payload}`)
+  //   console.log(`signature : ${signature}`)
+  //   console.log( `webhook : ${process.env.STRIPE_WEBHOOK_SECRET}`)
+
+  //   try {
+  //     event = stripe.webhooks.constructEvent(
+  //       payload,
+  //       signature,
+  //       process.env.STRIPE_WEBHOOK_SECRET
+  //     );
+
+     
+  //     console.log("webhook signature verified ✅"  )
+  //   } catch (err) {
+  //     console.log(`⚠️  Webhook signature verification failed. : ${err}`);
+  //     console.log(event)
+  //     return res.sendStatus(400);
+  //   }
+  // } else {
+  //   // Webhook signing is recommended, but if the secret is not configured in `.env`,
+  //   // retrieve the event data directly from the request body.
+  //   event = JSON.stringify(req.body.rawBody);
+  // }
+
+
+
+  res.sendStatus(200);
+});
+
+
+// app.post("/secret",async (req:Request,res:Response)=>{
+//   const data:{
+//     amount : number,
+//     description : string
+//   } = req.body 
+//   try{
+//   const paymentIntent = await stripe.paymentIntents.create({
+//     amount: data.amount,
+//     currency: 'inr',
+//     description : `payment for ${data.description} course`,
+//     payment_method_types: ['card'],
+//   });
+//   res.status(200).json({client_secret: paymentIntent.client_secret});}
+//   catch(e) {
+//     console.log(e)
+//     res.status(401).json({
+//       message : "secret error"
+//     })
+//   }
+// })
 
 app.get("/user/purchasedCourses",  authinecatejwt,  async (req: Request, res: Response) => {
    try {
