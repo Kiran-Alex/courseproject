@@ -1,7 +1,5 @@
 # CourseCo
 
-This project is Still in Development
-
  # Technologies Used:
 
 React,
