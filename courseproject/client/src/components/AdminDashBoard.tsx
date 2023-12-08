@@ -33,7 +33,7 @@ import { navam ,userpurchase } from "../../store/atoms/navbaratom";
 
 const AdminDashBoard = () => {
   const [courses, setCourses] = useState<course>();
-  const [title, setTitle] = useState<string>();
+  const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>();
   const [price, setPrice] = useState<string>();
   const [imageLink, setImageLink] = useState<string>();
@@ -42,7 +42,7 @@ const AdminDashBoard = () => {
   const navigate = useNavigate();
   const navamset = useSetRecoilState(navam);
   const navbtn =  useSetRecoilState(userpurchase)
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
   navamset("Dash");
   navbtn("admin")
 
@@ -97,7 +97,7 @@ const AdminDashBoard = () => {
             spacing={20}
             templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
           >
-            {courses &&
+            {courses ?
               courses.map(
                 (course: {
                   price: number | string;
@@ -107,6 +107,7 @@ const AdminDashBoard = () => {
                   published: boolean;
                   _id: number;
                 }) => {
+                  console.log(course)
                   return (
                     <Card key={course._id}>
                       <CardHeader>
@@ -126,116 +127,9 @@ const AdminDashBoard = () => {
                       </CardBody>
                       <CardFooter>
                         <ButtonGroup spacing="4">
-                          <Button onClick={onOpen}>Edit</Button>
-                          <Modal onClose={onClose} isOpen={isOpen} isCentered>
-                            <ModalOverlay />
-                            <ModalContent>
-                              <ModalHeader>Edit Course</ModalHeader>
-                              
-                              <ModalCloseButton />
-                              <ModalBody>
-                                <FormControl >
-                                  <FormLabel>Title</FormLabel>
-                                  <Input
-                                    placeholder={course.title}
-                                    onChange={(e) => {
-                                      setTitle(e.target.value);
-                                    }}
-                                  />
-                                  <FormLabel>Description</FormLabel>
-                                  <Input
-                                    placeholder={course.description}
-                                    onChange={(e) => {
-                                      setDescription(e.target.value);
-                                    }}
-                                  />
-                                  <FormLabel>Price</FormLabel>
-                                  <Input
-                                    placeholder={course.price.toString()}
-                                    onChange={(e) => {
-                                      setPrice(e.target.value);
-                                    }}
-                                  />
-                                  <FormLabel>Image Link</FormLabel>
-                                  <Input
-                                    placeholder={course.imageLink}
-                                    onChange={(e) => {
-                                      setImageLink(e.target.value);
-                                    }}
-                                  />
-                                  <FormLabel>Published</FormLabel>
-                                  <Select
-                                    variant="filled"
-                                    onChange={(e) => {
-                                      setPublished(e.target.value);
-                                    }}
-                                  >
-                                    <option
-                                      value={course.published ? 'true' : 'false'}
-                                    >
-                                      {course.published ? "true" : "false"}
-                                    </option>
-                                    <option
-                                      value={course.published ? 'false' : 'true'}
-                                    >
-                                      {course.published ? "false" : "true"}
-                                    </option>
-                                  </Select>
-                                </FormControl>
-                              </ModalBody>
-                              <ModalFooter>
-                                <Button
-                                  onClick={async () => {
-                                    let publishedstatus: boolean | string;
-                                    if (Published == undefined) {
-                                      publishedstatus = course.published;
-                                    } else {
-                                      publishedstatus = Published;
-                                    }
-                                    const response = await axios.put(
-                                      `${import.meta.env.VITE_BACKEND_URL}/admin/updateCourse/${course._id}`,
-                                      {
-                                        title: title,
-                                        description: description,
-                                        price: price,
-                                        imageLink: imageLink,
-                                        published: publishedstatus,
-                                      },
-                                      {
-                                        headers: {
-                                          authorization:
-                                            localStorage.getItem(import.meta.env.VITE_LOCAL_KEY),
-                                        },
-                                      }
-                                    );
-                                    if (response.status === 200) {
-                                      toast({
-                                        title: "Course Updated",
-                                        description: "Please Continue",
-                                        status: "success",
-                                        duration: 3000,
-                                        isClosable: true,
-                                      });
-                                      setTimeout(() => {
-                                        onClose();
-                                      }, 3000);
-                                    } else {
-                                      toast({
-                                        title: "Something went Wrong",
-                                        description:
-                                          "Please Try again later or Check Your details again",
-                                        status: "warning",
-                                        duration: 3000,
-                                        isClosable: true,
-                                      });
-                                    }
-                                  }}
-                                >
-                                  Save
-                                </Button>
-                              </ModalFooter>
-                            </ModalContent>
-                          </Modal>
+                        {/* onClick={onOpen} */} 
+                           <Button onClick={()=>{navigate(`/admin/dashboard/edit/${course._id}`)}}>Edit</Button> 
+                        
                           <Button variant="ghost" colorScheme={course.published == true ? "blue" : "blackAlpha"}>
                             {course.published == true ? "published" : "Not published"}
                           </Button>
@@ -244,7 +138,7 @@ const AdminDashBoard = () => {
                     </Card>
                   );
                 }
-              )}
+              ):<p>Loading...</p>}
           </SimpleGrid>
           <br></br>
         </div>

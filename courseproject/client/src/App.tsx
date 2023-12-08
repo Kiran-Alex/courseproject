@@ -13,6 +13,7 @@ import UserDashBoard from "./components/UserDashBoard";
 import Success from "./components/Success";
 import Cancel from "./components/Cancel";
 import UserPurchasedCourses from "./components/UserPurchasedCourses";
+import Adminedit from "./components/Adminedit";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Route path="/admin/login" element={<AdminLogin/>}/>
             <Route path="/admin/dashboard" element={<AdminDashBoard/>}/>
             <Route path="/admin/createcourse" element={<CreateCourse/>}/>
+            <Route path="/admin/dashboard/edit/:courseId" element={<Adminedit/>}/>
             <Route path="/success" element={<Success/>}/>
             <Route path="/cancel" element={<Cancel/>}/>
           </Routes>
