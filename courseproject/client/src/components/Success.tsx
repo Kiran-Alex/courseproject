@@ -11,7 +11,7 @@ const Success = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setLoadingText(   loadingText => {
+      setLoadingText(loadingText => {
         if (loadingText.length === 3) return '';
         return loadingText + '.'; 
       });
