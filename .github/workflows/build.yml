@@ -18,10 +18,12 @@ jobs:
             with:
                 node-version: 20
 
-          - name: installing dependencies 
+          - name: installing dependencies on client
             run: npm i
+            working-directory: courseproject/client
 
           - name: running build
             run: npm run build
+            working-directory: courseproject/client
 
           
